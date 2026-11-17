@@ -1,0 +1,306 @@
+[
+  {
+    "failure_id": "lf_github_issue_2873",
+    "source_url": "https://github.com/meta-pytorch/torchtune/issues/2873",
+    "source_type": "github_issue",
+    "failure_type": "STATE_DICT_SHAPE_MISMATCH",
+    "title": "Error running distributed Qwen3-32B lora",
+    "framework": "FSDP",
+    "environment": {
+      "gpu_type": "L40"
+    },
+    "error_message": "Traceback (most recent call last):\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/recipes/lora_finetune_distributed.py\", line 908, in <module>\n[rank3]:     sys.exit(recipe_main())\n[rank3]:              ^^^^^^^^^^^^^\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/torchtune/config/_parse.py\", line 99, in wrapper\n[rank3]:     sys.exit(recipe_main(conf))\n[rank3]:              ^^^^^^^^^^^^^^^^^\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/recipes/lora_finetune_distributed.py\", line 902, in recipe_main\n[rank3]:     recipe.setup(cfg=cfg)\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/recipes/lora_finetune_distributed.py\", line 288, in setup\n[rank3]:     self._model = self._setup_model(\n[rank3]:                   ^^^^^^^^^^^^^^^^^^\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/recipes/lora_finetune_distributed.py\", line 525, in _setup_model\n[rank3]:     base_missing, base_unexpected = training.load_from_full_model_state_dict(\n[rank3]:                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/torchtune/training/_distributed.py\", line 455, in load_from_full_model_state_dict\n[rank3]:     return model.load_state_dict(sharded_sd, strict=strict, assign=True)\n[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n[rank3]:   File \"/home/allen.philip/src/finetune/torchtune/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py\", line 2593, in load_state_dict\n[rank3]:     raise RuntimeError(\n[rank3]: RuntimeError: Error(s) in loading state_dict for FSDPTransformerDecoder:\n[rank3]:        size mismatch for layers.0._checkpoint_wrapped_module.attn.output_proj.weight: copying a param with shape torch.Size([5"
+  },
+  {
+    "failure_id": "lf_github_issue_2830",
+    "source_url": "https://github.com/meta-pytorch/torchtune/issues/2830",
+    "source_type": "github_issue",
+    "failure_type": "OOM_FRAGMENTATION",
+    "title": "OOM handling and recovery",
+    "framework": "Axolotl",
+    "environment": {
+      "cuda_version": "5.15"
+    },
+    "error_message": "File \"/mnt/fs/venv_torchtune/lib/python3.12/site-packages/recipes/full_finetune_distributed.py\", line 919, in train                \n[rank6]:     current_loss = self._loss_step(batch) * current_num_tokens                                                                       \n[rank6]:                    ^^^^^^^^^^^^^^^^^^^^^^                                                                                            \n[rank6]:   File \"/mnt/fs/venv_torchtune/lib/python3.12/site-packages/recipes/full_\n...\nenv_torchtune/lib/python3.12/site-packages/torchtune/modules/loss/cross_entropy_loss.py\", line 105, in compute_cross\n_entropy                                                                                                                                      \n[rank6]:     return F.cross_entropy(                                                                                                          \n[rank6]:            ^^^^^^^^^^^^^^^^                                                                                                          \n[rank6]:   File \"/mnt/fs/venv_torchtune/lib/python3.12/site-packages/torch/nn/functional.py\", line 3494, in cross_entropy                     \n[rank6]:     return torch._C._nn.cross_entropy_loss(                                                                                          \n[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                          \n[rank6]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 5.15 GiB. GPU 6 has a total capacity of 79.10 GiB of which 3.79 GiB is \nfree. Including non-PyTorch memory, this process has 75.30 GiB memory in use. Of the allocated memory 58.28 GiB is allocated by PyTorch, and 1\n5.06 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_se\ngments:True to avoid fragmentation.  See documentation for Memory Management"
+  },
+  {
+    "failure_id": "lf_github_issue_45663",
+    "source_url": "https://github.com/huggingface/transformers/issues/45663",
+    "source_type": "github_issue",
+    "failure_type": "FSDP_ERROR",
+    "title": "Gemma-4 training with FSDP2 raises `KeyError` in `Gemma4TextAttention.forward` because `shared_kv_states` is rebuilt per-layer",
+    "framework": "DeepSpeed",
+    "environment": {
+      "pytorch_version": "2.10.0",
+      "gpu_type": "H100"
+    },
+    "error_message": "nccl\")\ntorch.cuda.set_device(dist.get_rank())\ncast = os.environ.get(\"CAST_FORWARD_INPUTS\", \"1\") == \"1\"\nprint(f\"cast_forward_inputs={cast}\", flush=True)\n\n# 2-layer Gemma-4: layer 0 writes shared_kv_states[0], layer 1 reads it.\n#   * num_kv_shared_layers=1 - default 0 means no sharing layer, bug can't fire.\n#   * layer_types must be set (default None breaks model init); both must be\n#     full_attention because Gemma-4 force-overrides the last layer to full,\n#     so the first must match for the s"
+  },
+  {
+    "failure_id": "lf_github_issue_44928",
+    "source_url": "https://github.com/huggingface/transformers/issues/44928",
+    "source_type": "github_issue",
+    "failure_type": "GRADIENT_EXPLOSION",
+    "title": "[Bug] Catastrophic gradient explosion (NaN) in RLHF with Qwen3.5 due to 3D position_ids forcing SDPA Math fallback and BF16 collapse",
+    "framework": "DeepSpeed",
+    "environment": {
+      "pytorch_version": "2.10.0",
+      "cuda_version": "12.8",
+      "gpu_type": "A100"
+    },
+    "error_message": "### System Info\n\nCopy-and-paste the text below in your GitHub issue and FILL OUT the two last points.\n\n- `transformers` version: 5.3.0\n- Platform: Linux-6.8.0-40-generic-x86_64-with-glibc2.35\n- Python version: 3.11.15\n- Huggingface_hub version: 1.7.1\n- Safetensors version: 0.7.0\n- Accelerate version: 1.13.0\n- Accelerate config:    not found\n- DeepSpeed version: 0.18.8\n- PyTorch version (accelerator?): 2.10.0+cu128 (CUDA)\n- Using distributed or parallel set-up in script?: <fill in>\n- Using GPU in"
+  },
+  {
+    "failure_id": "lf_github_issue_43541",
+    "source_url": "https://github.com/huggingface/transformers/issues/43541",
+    "source_type": "github_issue",
+    "failure_type": "TORCH_COMPILE_DYNAMO",
+    "title": "RuntimeError: MixtralForCausalLM float32 model errors at grouped_mm op during torch dynamo tracing",
+    "framework": "DeepSpeed",
+    "environment": {
+      "pytorch_version": "2.9.1"
+    },
+    "error_message": "File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/torch/_subclasses/fake_tensor.py\", line 2096, in dispatch\n    return self._cached_dispatch_impl(func, types, args, kwargs)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/torch/_subclasses/fake_tensor.py\", line 1511, in _cached_dispatch_impl\n    output = self._dispatch_impl(func, types, args, kwargs)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/\n...\nmoduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 1775, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/torch/nn/modules/module.py\", line 1786, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/transformers/models/mixtral/modeling_mixtral.py\", line 394, in forward\n    hidden_states = self.mlp(hidden_states)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/transformers/models/mixtral/modeling_mixtral.py\", line 134, in forward\n    hidden_states = self.experts(hidden_states, top_k_index, top_k_weights)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/transformers/integrations/moe.py\", line 349, in forward\n    return experts_forward(self, *args, **kwargs)\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/transformers/integrations/moe.py\", line 263, in grouped_mm_experts_forward\n    gate_up_out = _grouped_linear(\n  File \"/home/ubuntu/workplace/tc_moduscope/src/TorchNeuronEager/.venv/lib/python3.10/site-packages/transformers/integrations/moe.py\", line 191, in _grouped_linear\n    out = torch._grouped_mm(input, weight.transpose(-2, -1), offs=offs)"
+  },
+  {
+    "failure_id": "lf_github_issue_3169",
+    "source_url": "https://github.com/huggingface/peft/issues/3169",
+    "source_type": "github_issue",
+    "failure_type": "TENSOR_DEVICE_MISMATCH",
+    "title": "LoRA + BnB INT8 + CPU offload: output tensor on wrong device in tuners/lora/bnb.py",
+    "framework": "Unknown",
+    "environment": {
+      "gpu_type": "RTX 4090"
+    },
+    "error_message": "RuntimeError: Expected all tensors to be on the same device,\nbut found at least two devices, cuda:0 and cpu!\n```\n\n## Full context\n\nDiscovered while making Gemma4 26B-A4B train on a single RTX 4090 (BnB INT8 + LoRA + Gradient Checkpointing + CPU offload). All patches + complete training example:\n\nhttps://github.com/sirfyyn/consumer-llm-patches\n\nHappy to submit a PR. The fix is a one-liner per site but needs testing against non-offload setups to confirm no regression."
+  },
+  {
+    "failure_id": "lf_github_issue_7844",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7844",
+    "source_type": "github_issue",
+    "failure_type": "SILENT_HANG",
+    "title": "[BUG] DeepSpeed ZeRO-3 deadlock in engine.step() at step 0 under 2-GPU execution (RTX 3090, torch 2.2.1, DS 0.14.2)",
+    "framework": "DeepSpeed",
+    "environment": {
+      "pytorch_version": "2.2.1",
+      "cuda_version": "12.1",
+      "gpu_type": "RTX 3090",
+      "num_gpus": 2
+    },
+    "error_message": "NCCL_SOCKET_IFNAME=eno2\nexport GLOO_SOCKET_IFNAME=eno2\nexport NCCL_IB_DISABLE=1\n\n# ZeRO stage\nexport DS_ZERO_STAGE=3\n\n# run\ndeepspeed --num_gpus 2 testcases/deepspeed_testcase.py\n```\n\n3. Observe logs: \nBoth ranks print:\n```\n- R0 STEP0 route=0 -> forward\n- R1 STEP0 route=0 -> forward\n- ... -> backward\n- R0 STEP0 route=0 -> step_begin\n- R1 STEP0 route=0 -> step_begin\nThen repeated:\n- HEARTBEAT rank=0 step=0 phase=step_begin age=...\n- HEARTBEAT rank=1 step=0 phase=step_begin age=...\nAfter >60s:\n- T"
+  },
+  {
+    "failure_id": "lf_github_issue_7811",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7811",
+    "source_type": "github_issue",
+    "failure_type": "DEEPSPEED_ERROR",
+    "title": "[BUG] ZeRO-3: zero.GatheredParameters([multiple params], modifier_rank=None) + in-place slice touch triggers assert not param.ds_active_sub_modules in free_param()",
+    "framework": "DeepSpeed",
+    "environment": {},
+    "error_message": "[rank0] CONFIG world=2 device=cuda:0 vocab=32768 d_model=2048 iters=200 tile=8 do_bwd=True force_edit=True\n[rank0] EXC TRACEBACK:\nTraceback (most recent call last):\n  File \".../ds_zero3_gather_assert_tri.py\", line 125, in main\n    with zero.GatheredParameters(params, modifier_rank=None):\n  File \".../deepspeed/runtime/zero/partition_parameters.py\", line 2344, in __exit__\n    self.params[0].partition(param_list=self.params, has_been_updated=False)\n  File \".../deepspeed/runtime/zero/partition_parameters.py\", line 1487, in partition\n    self._partition(param_list, has_been_updated=has_been_updated, free_data=True)\n  File \".../deepspeed/runtime/zero/partition_parameters.py\", line 1636, in _partition\n    self._partition_param(param, has_been_updated=has_been_updated, free_data=True)\n  File \".../deepspeed/runtime/zero/partition_parameters.py\", line 1670, in _partition_param\n    free_param(param)\n  File \".../deepspeed/runtime/zero/partition_parameters.py\", line 302, in free_param\n    assert not param.ds_active_sub_modules, param.ds_summary()\nAssertionError: {'id': 0, 'status': 'AVAILABLE', 'numel': 67108864, 'ds_numel': 67108864, 'shape': (32768, 2048), 'ds_shape': (32768, 2048), 'requires_grad': True, 'grad_shape': None, 'persist': False, 'active_sub_modules': {1}, 'ds_tensor.shape': torch.Size([33554432])}\n\n[rank0] RESULT hit=True exc=AssertionError: {'id': 0, ... 'active_sub_modules': {1}, ...}\nTest Passed ✅"
+  },
+  {
+    "failure_id": "lf_github_issue_7746",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7746",
+    "source_type": "github_issue",
+    "failure_type": "VERSION_MISMATCH",
+    "title": "[BUG] Dtype mismatch (bf16 vs fp32) when resuming Muon optimizer from checkpoint",
+    "framework": "DeepSpeed",
+    "environment": {
+      "cuda_version": "0.050000000000000044",
+      "gpu_type": "H100"
+    },
+    "error_message": "[rank2]: torch._dynamo.exc.TorchRuntimeError: Failed running call_method lerp_(*(FakeTensor(..., device='cuda:2', size=(1, 64)), FakeTensor(..., device='cuda:2', size=(1, 64), dtype=torch.bfloat16), 0.050000000000000044), **{}):\n[rank2]: expected dtype torch.float32 for `end`, but got dtype torch.bfloat16\n\n[rank2]: from user code:\n[rank2]:    File \"/usr/local/lib/python3.12/dist-packages/deepspeed/runtime/zero/muon/original_muon.py\", line 72, in torch_dynamo_resume_in_muon_update_at_71\n[rank2]:     momentum.lerp_(grad, 1 - beta)"
+  },
+  {
+    "failure_id": "lf_github_issue_7584",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7584",
+    "source_type": "github_issue",
+    "failure_type": "CHECKPOINT_CORRUPTION",
+    "title": "[BUG] universal checkpoin for stage3 fail when there are multiple subgroups",
+    "framework": "DeepSpeed",
+    "environment": {},
+    "error_message": "Traceback (most recent call last):\n  File \"/work/zhengchenyu/ai-project/qwen3/scripts/ds_to_universal_example.py\", line 21, in <module>\n    main()\n  File \"/work/zhengchenyu/ai-project/qwen3/scripts/ds_to_universal_example.py\", line 18, in main\n    ds_to_universal_main(args)\n  File \"/opt/conda/lib/python3.11/site-packages/deepspeed/checkpoint/ds_to_universal.py\", line 523, in main\n    _extract_zero_shard_files_stage3(args, optim_files, param_shapes, dp_degree, temp_dir)\n  File \"/opt/conda/lib/python3.11/site-packages/deepspeed/checkpoint/ds_to_universal.py\", line 375, in _extract_zero_shard_files_stage3\n    _do_parallel_work(do_work, list(range(dp_degree)), args.num_extract_workers)\n  File \"/opt/conda/lib/python3.11/site-packages/deepspeed/checkpoint/ds_to_universal.py\", line 359, in _do_parallel_work\n    results.append(do_work(work))\n                   ^^^^^^^^^^^^^\n  File \"/opt/conda/lib/python3.11/site-packages/deepspeed/checkpoint/ds_to_universal.py\", line 167, in extract_zero_shards_stage3\n    dump_param_fragment(temp_dir, 0, dp_index, state_key, flat_state[state_key], name, offset,\n  File \"/opt/conda/lib/python3.11/site-packages/deepspeed/checkpoint/ds_to_universal.py\", line 194, in dump_param_fragment\n    state_flat_tensor = state_flat_tensor.narrow(0, offset, numel).clone()\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: start (0) + length (155582464) exceeds dimension size (74499072)."
+  },
+  {
+    "failure_id": "lf_github_issue_7549",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7549",
+    "source_type": "github_issue",
+    "failure_type": "DEEPSPEED_NVME_CHECKPOINT_RACE",
+    "title": "[BUG] save_checkpoint race when consolidating NVMe offloaded tensors → FileExistsError",
+    "framework": "DeepSpeed",
+    "environment": {
+      "cuda_version": "12.4",
+      "num_gpus": 2
+    },
+    "error_message": "**Describe the bug**\nWhen calling save_checkpoint (via accelerator.save_state) from all ranks on a multi-GPU run with ZeRO Stage 3 NVMe offloading enabled, DeepSpeed attempts to consolidate per-rank NVMe offload directories into a single shared offloaded_tensors destination using shutil.copytree. Because all ranks call the method concurrently, two processes race to create/copy into the same destination directory and one fails with FileExistsError: [Errno 17] File exists. The docstring correctly "
+  },
+  {
+    "failure_id": "lf_github_issue_186357",
+    "source_url": "https://github.com/pytorch/pytorch/issues/186357",
+    "source_type": "github_issue",
+    "failure_type": "TORCH_COMPILE_AOTI",
+    "title": "AOTInductor on Windows: models with >2GB constants fail to load - 32-bit `lseek` overflow (`weights_offset must be aligned to 16K boundary`)",
+    "framework": "PyTorch",
+    "environment": {
+      "cuda_version": "12.8",
+      "gpu_type": "RTX 5060"
+    },
+    "error_message": "# aoti_mmap_probe.py  -  build needs MSVC + CUDA toolkit (vcvars64; LINK=cudart.lib)\nimport torch, os\nfrom torch import nn\n\nclass MLP(nn.Module):\n    def __init__(self, d=8192, n=18):           # 18 * 8192^2 * 2 bytes ≈ 2.36 GB > 2GB threshold\n        super().__init__()\n        self.layers = nn.ModuleList([nn.Linear(d, d) for _ in range(n)])\n    def forward(self, x):\n        for lin in self.layers:\n            x = torch.relu(lin(x))\n        return x\n\nm = MLP().cuda().to(torch.bfloat16).eval()\nx = torch.randn(1, 8192, device=\"cuda\", dtype=torch.bfloat16)\nwith torch.no_grad():\n    ep = torch.export.export(m, (x,))\n    so = torch._inductor.aot_compile(ep.module(), (x,))\nloaded = torch._export.aot_load(so, \"cuda\")     # <-- RuntimeError: weights_offset must be aligned to 16K boundary\nprint(loaded(x).shape)"
+  },
+  {
+    "failure_id": "lf_github_issue_185535",
+    "source_url": "https://github.com/pytorch/pytorch/issues/185535",
+    "source_type": "github_issue",
+    "failure_type": "TORCH_COMPILE_INDUCTOR",
+    "title": "[inductor] cat lowering AssertionError with 1-D empty tensor and negative dim",
+    "framework": "PyTorch",
+    "environment": {},
+    "error_message": "### 🐛 Describe the bug\n\nInductor's lowering for `aten.cat.default` raises `AssertionError` when a 1-D empty tensor (e.g. `torch.tensor([])`) appears among the inputs and `dim` is negative with magnitude exceeding that tensor's rank.\n\nATen handles this via `cat_should_skip_tensor`: 1-D tensors with numel==0 are skipped during dimension validation and concatenation. Inductor's `cat` lowering does not replicate this skip, so `_validate_dim` always uses `inputs[0]` as the reference for normalizing n"
+  },
+  {
+    "failure_id": "lf_github_search_139884",
+    "source_url": "https://github.com/pytorch/pytorch/issues/139884",
+    "source_type": "github_search",
+    "failure_type": "PINNED_HOST_MEMORY_ALLOCATION_LIMIT",
+    "title": "Persistent memory leak from failed pinned memory allocation",
+    "framework": "PyTorch",
+    "environment": {
+      "pytorch_version": "2.5.1",
+      "cuda_version": "12.4",
+      "gpu_type": "RTX 4070"
+    },
+    "error_message": "Traceback (most recent call last):\r\n  File \"[...]/leakmem.py\", line 2, in <module>\r\n    torch.empty((1024,1024,1024), dtype=torch.float32, pin_memory=True)\r\nRuntimeError: CUDA error: invalid argument\r\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\r\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\r\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\r\n```\r\n\r\nThe failure happens when the allocated size is sufficiently large. That's alright, I understand it has to do with limitations with pinned memory. Not so fine is that 4 gigs of memory apparently does get consumed and stays that way after the process exits, and even after the user has no processes. I don't see anything relevant in `/dev/shm/`. I don't know how to free it other than by rebooting.\r\n\r\n### Versions\r\n\r\n#### Affected system\r\n\r\n```\r\nCollecting environment information...\r\nPyTorch version: 2.5.1+cu124\r\nIs debug build: False\r\nCUDA used to build PyTorch: 12.4\r\nROCM used to build PyTorch: N/A\r\n\r\nOS: openSUSE Tumbleweed (x86_64)\r\nGCC version: (SUSE Linux) 14.2.1 20241007 [revision 4af44f2cf7d281f3e4f3957efce10e8b2ccb2ad3]\r\nClang version: Could not collect\r\nCMake version: version 3.30.5\r\nLibc version: glibc-2.40\r\n\r\nPython version: 3.11.10 (main, Sep 09 2024, 17:03:08) [GCC] (64-bit runtime)\r\nPython platform: Linux-6.11.5-2-default-x86_64-with-glibc2.40\r\nIs CUDA available: True\r\nCUDA runtime version: Could not collect\r\nCUDA_MODULE_LOADING set to: LAZY\r\nGPU models and configuration: GPU 0: NVIDIA GeForce RTX 4070\r\nNvidia driver version: 550.127.05\r\ncuDNN version: Could not collect\r\nHIP runtime version: N/A\r\nMIOpen runtime version: N/A\r\nIs XNNPACK available: True\r\n\r\nCPU:\r\nArchitecture:                         x86_64\r\nCPU op-mode(s):                       32-bit, 64-bit\r\nAddress sizes:                        48 bits physical, 48 bits virtual\r\nByte Order:                           Little Endian\r\nCPU(s):                       "
+  },
+  {
+    "failure_id": "lf_github_search_14766",
+    "source_url": "https://github.com/huggingface/transformers/issues/14766",
+    "source_type": "github_search",
+    "failure_type": "NAN_LOSS",
+    "title": "Nan when training LayoutLM_V2 Model",
+    "framework": "PyTorch",
+    "environment": {
+      "pytorch_version": "1.10.0"
+    },
+    "error_message": "## Environment info\r\n<!-- You can run the command `transformers-cli env` and copy-and-paste its output below.\r\n     Don't forget to fill out the missing fields in that output! -->\r\n\r\n- `transformers` version: 4.13.0\r\n- Platform: Linux-5.4.104+-x86_64-with-Ubuntu-18.04-bionic\r\n- Python version: 3.7.12\r\n- PyTorch version (GPU) : 1.10.0+cu111\r\n- Tensorflow version (GPU): 2.7.0\r\n- Flax version: not installed\r\n- Jax version: not installed\r\n- JaxLib version: not installed\r\n\r\n\r\n### Who can help\r\n<!-- Y"
+  },
+  {
+    "failure_id": "gc6_gc6-pytorch-pytorch-143580",
+    "source_url": "https://github.com/pytorch/pytorch/issues/143580",
+    "source_type": "generalization_cycle_6",
+    "failure_type": "DDP_ERROR",
+    "title": "RuntimeError: expect_autograd_hooks_ INTERNAL ASSERT FAILED at \"../torch/csrc/distributed/c10d/reducer.cpp\"",
+    "framework": "pytorch",
+    "environment": {
+      "family": "pytorch-distributed"
+    },
+    "error_message": "[stack] torch, DDP, PyTorch, cuda, nccl\nReproduces the error\nThis scenario triggers the error\n[rank0]: RuntimeError: expect_autograd_hooks_ INTERNAL ASSERT FAILED at \"../torch/csrc/distributed/c10d/reducer.cpp\":1603, please report a bug to PyTorch.\nNo no_sync() context - works without error"
+  },
+  {
+    "failure_id": "gc6_gc6-deepspeedai-deepspeed-3574",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/3574",
+    "source_type": "generalization_cycle_6",
+    "failure_type": "DEEPSPEED_ZERO3_PARTITIONED_CHECKPOINT_SHAPE_MISMATCH",
+    "title": "fail to load checkpoints after zero3 initialize",
+    "framework": "deepspeed",
+    "environment": {
+      "family": "deepspeed-megatron"
+    },
+    "error_message": "[stack] torch, deepspeed, checkpoint\nraise RuntimeError('Error(s) in loading state_dict for {}:\\n\\t{}'.format(\nRuntimeError: Error(s) in loading state_dict for MT5ForConditionalGeneration:\nsize mismatch for shared.weight: copying a param with shape torch.Size([250112, 512]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.embed_tokens.weight: copying a param with shape torch.Size([250112, 512]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.block.0.layer.0.SelfAttention.q.weight: copying a param with shape torch.Size([384, 512]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.block.0.layer.0.SelfAttention.k.weight: copying a param with shape torch.Size([384, 512]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.block.0.layer.0.SelfAttention.v.weight: copying a param with shape torch.Size([384, 512]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.block.0.layer.0.SelfAttention.o.weight: copying a param with shape torch.Size([512, 384]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight: copying a param with shape torch.Size([32, 6]) from checkpoint, the shape in current model is torch.Size([0]).\nsize mismatch for encoder.block.0.layer.0.layer_norm.weight: copying a param with shape torch.Size([512]) from checkpoint, the shape in current model is torch.Size([0])."
+  },
+  {
+    "failure_id": "depth_pytorch_190964",
+    "source_url": "https://github.com/pytorch/pytorch/issues/190964",
+    "source_type": "corpus_depth_mined",
+    "failure_type": "DEVICE_ASSERT",
+    "title": "illegal memory access for torch.prod with unusual sizes",
+    "framework": "pytorch",
+    "environment": {
+      "family": "pytorch/pytorch"
+    },
+    "error_message": "Traceback (most recent call last):\n  File \"/root/test.py\", line 7, in <module>\n    torch.cuda.synchronize()\n  File \"/root/.pyenv/versions/3.12.13/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 1219, in synchronize\n    return torch._C._cuda_synchronize()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntorch.AcceleratorError: CUDA error: an illegal memory access was encountered\nSearch for `cudaErrorIllegalAddress' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1"
+  },
+  {
+    "failure_id": "lf_github_issue_43856",
+    "source_url": "https://github.com/huggingface/transformers/issues/43856",
+    "source_type": "github_issue",
+    "failure_type": "OOM_FRAGMENTATION",
+    "title": "Inefficient memory usage during Qwen3 MoE training",
+    "framework": "DeepSpeed",
+    "environment": {
+      "pytorch_version": "2.9.0",
+      "cuda_version": "0.8",
+      "gpu_type": "H100"
+    },
+    "error_message": "torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.00 MiB. GPU 0 has a total capacity of 79.19 GiB of which 2.50 MiB is free. Process 2253701 has 79.18 GiB memory in use. Of the allocated memory 51.31 GiB is allocated by PyTorch, and 27.15 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)"
+  },
+  {
+    "failure_id": "lf_github_issue_3265",
+    "source_url": "https://github.com/huggingface/peft/issues/3265",
+    "source_type": "github_issue",
+    "failure_type": "OOM_FRAGMENTATION",
+    "title": "prepare_model_for_kbit_training adds ~1 GB CUDA reserved memory in 500 ms - undocumented cost that breaks memory-constrained training on 8 GB unified-memory devices",
+    "framework": "FSDP",
+    "environment": {
+      "cuda_version": "0.3",
+      "gpu_type": "RTX 4060"
+    },
+    "error_message": "torch.cuda.memory_allocated() // (1024 * 1024),\n        \"cuda_reserved_mb\":  torch.cuda.memory_reserved()  // (1024 * 1024),\n    }), flush=True)\n\nbnb_cfg = BitsAndBytesConfig(\n    load_in_4bit=True,\n    bnb_4bit_quant_type=\"nf4\",\n    bnb_4bit_compute_dtype=torch.bfloat16,\n    bnb_4bit_use_double_quant=True,\n)\n\nsnap(\"00_start\")\nmodel = AutoModelForCausalLM.from_pretrained(\n    \"mistralai/Mistral-7B-v0.3\",\n    quantization_config=bnb_cfg,\n    torch_dtype=torch.bfloat16,\n    device_map={\"\": 0},\n   "
+  },
+  {
+    "failure_id": "lf_github_issue_3073",
+    "source_url": "https://github.com/huggingface/peft/issues/3073",
+    "source_type": "github_issue",
+    "failure_type": "GRADIENT_EXPLOSION",
+    "title": "LoRA gradients not normalized by input norm → training instability (NaN)",
+    "framework": "Unknown",
+    "environment": {},
+    "error_message": "### System Info\n\nFound an issue: PEFT scales LoRA output by α / r​, but gradients remain linearly dependent on input norm ∥x∥∥x∥:\n∥Grad∥∝α / r⋅∥x∥ \nWhen activations vary 10-100× across layers, this causes:\n    Gradient explosion → NaN on first steps\n    Vanishing gradients in layers with small activations\nWorkaround: Added a hook that normalizes gradients by input energy:\nscale=α / r * mean(x^T*x)​\nWithout this - NaN on step 1-5. With this - stable training.\nSuggestion: Add normalize_grad_by_inp"
+  },
+  {
+    "failure_id": "lf_github_issue_7741",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7741",
+    "source_type": "github_issue",
+    "failure_type": "SILENT_HANG",
+    "title": "[BUG] DecoupledCheckpointEngine hangs indefinitely due to missing timeouts and process health checks",
+    "framework": "DeepSpeed",
+    "environment": {},
+    "error_message": "# Replace assert with proper validation\nif info != self.commit_info:\n    raise ValueError(f\"Checkpoint commit info mismatch: expected {self.commit_info}, got {info}\")\n\n# Add timeout to event wait with process health check\nTIMEOUT_SECONDS = 300  # 5 minutes\nwhile not self.save_event.wait(timeout=10):\n    if not self.ckpt_process.is_alive():\n        raise RuntimeError(\"Checkpoint process died unexpectedly\")\n\n# Add timeout to process join\nself.ckpt_process.join(timeout=TIMEOUT_SECONDS)\nif self.ckpt_process.is_alive():\n    self.ckpt_process.terminate()\n    raise RuntimeError(\"Checkpoint process failed to exit within timeout\")"
+  },
+  {
+    "failure_id": "lf_github_issue_7635",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7635",
+    "source_type": "github_issue",
+    "failure_type": "VERSION_MISMATCH",
+    "title": "[BUG] TypeError: DeepSpeedEngine.load_checkpoint() got an unexpected keyword argument 'weights_only'",
+    "framework": "DeepSpeed",
+    "environment": {
+      "gpu_type": "A100"
+    },
+    "error_message": "Traceback (most recent call last):\n[rank0]:   File \"/inspire/ssd/project/robot3d/mazipei-253107140027/WorldActionModel/main.py\", line 69, in <module>\n[rank0]:     main()\n[rank0]:   File \"/inspire/ssd/project/robot3d/mazipei-253107140027/WorldActionModel/main.py\", line 45, in main\n[rank0]:     runner.train()\n[rank0]:   File \"/inspire/ssd/project/robot3d/mazipei-253107140027/WorldActionModel/runner/ltx_video_trainer.py\", line 489, in train\n[rank0]:     self.state.accelerator.load_state(resume_dir, weights_only=False)\n[rank0]:   File \"/opt/miniconda3/envs/genie_envisioner/lib/python3.10/site-packages/accelerate/accelerator.py\", line 3690, in load_state\n[rank0]:     model.load_checkpoint(input_dir, ckpt_id, **load_model_func_kwargs)\n[rank0]: TypeError: DeepSpeedEngine.load_checkpoint() got an unexpected keyword argument 'weights_only'\n```"
+  },
+  {
+    "failure_id": "lf_github_issue_7607",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7607",
+    "source_type": "github_issue",
+    "failure_type": "VERSION_MISMATCH",
+    "title": "[BUG] ZeRO 2 ipg_buckets key error",
+    "framework": "DeepSpeed",
+    "environment": {
+      "cuda_version": "12.9"
+    },
+    "error_message": "NCCL version: the result is overridden to be `fp32` in any case.\n\nNote: It appears with torch autocast enabled, a different initialisation path might avoid this crash.\n"
+  },
+  {
+    "failure_id": "lf_github_issue_7581",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/issues/7581",
+    "source_type": "github_issue",
+    "failure_type": "DEEPSPEED_ERROR",
+    "title": "[BUG] Unit Test TestFp8ComposabilityAcrossZero.test[fp16] failure",
+    "framework": "DeepSpeed",
+    "environment": {
+      "cuda_version": "13.0"
+    },
+    "error_message": "Traceback (most recent call last):\n  File \"/usr/lib/python3.12/multiprocessing/pool.py\", line 125, in worker\n    result = (True, func(*args, **kwds))\n                    ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/multiprocessing/pool.py\", line 51, in starmapstar\n    return list(itertools.starmap(args[0], args[1]))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/not_working/DeepSpeed/tests/unit/common.py\", line 325, in _dist_run\n    raise e\n  File \"/root/not_working/DeepSpeed/tests/unit/common.py\", line 317, in _dist_run\n    self.run(**self._fixture_kwargs)\n  File \"/root/not_working/DeepSpeed/tests/unit/common.py\", line 473, in run\n    self._current_test(**fixture_kwargs)\n  File \"/root/not_working/DeepSpeed/tests/unit/runtime/half_precision/test_fp8.py\", line 98, in test\n    assert (all_equal)\n            ^^^^^^^^^\nAssertionError\n\"\"\"\n```"
+  }
+]
