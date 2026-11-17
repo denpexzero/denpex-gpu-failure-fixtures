@@ -12,8 +12,6 @@ REQUIRED_FIELDS = (
     "source_type",
     "failure_type",
     "title",
-    "framework",
-    "environment",
     "error_message",
 )
 
